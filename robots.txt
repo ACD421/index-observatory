@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://acd421.github.io/index-observatory/sitemap.xml

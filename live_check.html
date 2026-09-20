@@ -51,15 +51,6 @@ probes.forEach(([id,url,kind])=>{
 fetch('data.json').then(r=>r.text()).then(t=>{document.getElementById('fetchdemo').textContent='FETCH-RENDERED-gvrp-2b6a91: '+t.slice(0,80);}).catch(()=>{document.getElementById('fetchdemo').textContent='FETCH-FAILED-gvrp-8c2d40';});
 </script>
 
-
-<h2>5. Commanded-fetch receipts (crawler-as-executor test)</h2>
-<p>Each anchor below instructs a crawler to fetch a receipt endpoint we control. If our log shows the fetch arriving from Google IP space with Googlebot UA, the crawler executed a third-party-issued fetch command. The relay anchor demonstrates redirect-following under command.</p>
-<ul>
-<li><a href="https://professor-quoted-raid-owned.trycloudflare.com/cmd-alpha-gvrp">command ALPHA — fetch receipt</a></li>
-<li><a href="https://professor-quoted-raid-owned.trycloudflare.com/cmd-beta-gvrp">command BETA — fetch receipt</a></li>
-<li><a href="https://professor-quoted-raid-owned.trycloudflare.com/relay?to=https://example.com/relay-exit-gvrp">command GAMMA — redirect relay</a> (crawler should follow the relay and hit the exit URL)</li>
-</ul>
-
 <h2>4. Source-vs-render discriminator</h2>
 <p>STATIC-TOKEN-gvrp-a1b2c3 appears in page source. RENDER-TOKEN-gvrp-d4e5f6 appears only after script execution. If an index snippet contains RENDER-TOKEN but not STATIC-TOKEN-context, indexing is post-render.</p>
 
