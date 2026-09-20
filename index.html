@@ -63,20 +63,19 @@ PROBES.forEach(function(pr){
   var tr=document.createElement('tr');
   tr.innerHTML='<td class="probe-id">'+id+'</td><td><a href="'+url.replace('/favicon.ico','/')+'">'+url+'</a></td><td>'+kind+'</td><td class="status" id="'+id+'">NOT-RENDERED</td>';
   t.appendChild(tr);
-  var img=new Image();
-  img.onload=function(){
-    document.getElementById(id).textContent='SUBRESOURCE-LOADED';
-    probeOutcomes.probes[id]={status:'SUBRESOURCE-LOADED',timestamp:new Date().toISOString()};
-    clog('[PROBE-SUCCESS]['+id+'] STATUS: SUBRESOURCE-LOADED | '+url);
-    fastBeacon('/probe-'+id.toLowerCase()+'-gvrp','&st='+encodeURIComponent(sessionToken)+'&r=LOADED');
-  };
-  img.onerror=function(){
-    document.getElementById(id).textContent='LOAD-ERROR';
-    probeOutcomes.probes[id]={status:'LOAD-ERROR',timestamp:new Date().toISOString()};
-    clog('[PROBE-ERROR]['+id+'] not loadable | '+url);
-    fastBeacon('/probe-'+id.toLowerCase()+'-gvrp','&st='+encodeURIComponent(sessionToken)+'&r=ERROR');
-  };
-  img.src=url+'?probe='+id.toLowerCase()+'&cb='+Date.now();
+  fetch(url+'?probe='+id.toLowerCase()+'&cb='+Date.now(),{mode:'no-cors'})
+  .then(function(){
+    document.getElementById(id).textContent='NETWORK-REACHABLE';
+    probeOutcomes.probes[id]={status:'NETWORK-REACHABLE',timestamp:new Date().toISOString()};
+    clog('[PROBE-SUCCESS]['+id+'] STATUS: NETWORK-REACHABLE (opaque response, host answered) | '+url);
+    fastBeacon('/probe-'+id.toLowerCase()+'-gvrp','&st='+encodeURIComponent(sessionToken)+'&r=REACHABLE');
+  })
+  .catch(function(err){
+    document.getElementById(id).textContent='NETWORK-UNREACHABLE';
+    probeOutcomes.probes[id]={status:'NETWORK-UNREACHABLE',timestamp:new Date().toISOString(),error:String(err&&err.message||err).slice(0,80)};
+    clog('[PROBE-ERROR]['+id+'] network-level failure (DNS/TLS/conn) | '+url);
+    fastBeacon('/probe-'+id.toLowerCase()+'-gvrp','&st='+encodeURIComponent(sessionToken)+'&r=UNREACHABLE');
+  });
 });
 setTimeout(function(){
   console.log('[OBSERVATORY-COMPLETE] All branches evaluated. Dispatching final data package...');
