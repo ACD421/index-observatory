@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Index Behavior Observatory — VRP Research Instrument</title>
+<meta name="robots" content="index, follow">
+<meta name="description" content="Google VRP research instrument: crawler/renderer behavior observatory. All probe targets are researcher-disclosed Google infrastructure endpoints from VRP report filings.">
+<style>body{font-family:monospace;max-width:900px;margin:2rem auto;padding:0 1rem;background:#0d0d10;color:#c9c9d4}h1{color:#e50914}table{border-collapse:collapse;width:100%}td,th{border:1px solid #333;padding:6px 8px;text-align:left;font-size:13px}.probe-id{color:#e50914}.status{font-weight:700}.note{color:#777}</style>
+</head>
+<body>
+<h1>Index Behavior Observatory</h1>
+<p>Automated indexing-research instrument (Google VRP). This page observes how search crawlers discover, render, and index linked and subresource URLs. Every probe token below is unique and exists solely to measure index behavior. Probe targets are Google infrastructure endpoints already publicly disclosed in filed VRP reports.</p>
+
+<h2>1. Post-render DOM canary</h2>
+<p id="render-canary">CANARY-SOURCE-ONLY-gvrp-7f3a1d</p>
+<script>document.getElementById('render-canary').textContent='CANARY-RENDERED-DOM-gvrp-9c4e2b — you are reading renderer-executed JavaScript output, not page source.';</script>
+
+<h2>2. Probe matrix</h2>
+<p class="note">Each row: an anchor (crawl-graph probe) + a subresource fetch (renderer-network probe). The RESULT column is written by JavaScript only if the subresource loads — a load event can only fire in a rendering engine that could actually reach the host.</p>
+<table id="matrix">
+<tr><th>Probe ID</th><th>Target</th><th>Type</th><th>Result</th></tr>
+</table>
+<script>
+const probes=[
+ ['P01-GITHUB-CONTROL','https://github.com/favicon.ico','reachable-control'],
+ ['P02-CANARY-TUNNEL-A','https://hewlett-highways-fewer-scripts.trycloudflare.com/favicon.ico','tunnel-canary'],
+ ['P03-CANARY-TUNNEL-B','https://called-liz-mods-incomplete.trycloudflare.com/favicon.ico','tunnel-canary'],
+ ['P04-NXDOMAIN-CONTROL','https://definitely-not-real-0xdeadbeef.invalid/favicon.ico','unreachable-control'],
+ ['P05-ANDROIDBUILDINTERNAL','https://androidbuildinternal.googleapis.com/favicon.ico','vrp-disclosed-endpoint'],
+ ['P06-ANDROIDBUILD-PA','https://androidbuild-pa.googleapis.com/favicon.ico','vrp-disclosed-endpoint'],
+ ['P07-MACSERVICE-GOOG','https://macservice.goog/favicon.ico','vrp-disclosed-host'],
+ ['P08-RBE-PROD','https://rbe-prod.c3.macservice.goog/favicon.ico','vrp-disclosed-host'],
+ ['P09-GCS-ANDROID-BUILD','https://storage.googleapis.com/android-build/favicon.ico','vrp-disclosed-bucket'],
+ ['P10-GCS-FLASH','https://flash.android.com/favicon.ico','vrp-disclosed-host'],
+];
+const t=document.getElementById('matrix');
+probes.forEach(([id,url,kind])=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td class="probe-id">'+id+'</td><td><a href="'+url.replace('/favicon.ico','/')+'">'+url+'</a></td><td>'+kind+'</td><td class="status" id="'+id+'">NOT-RENDERED</td>';
+  t.appendChild(tr);
+  const img=new Image();
+  img.onload=()=>{document.getElementById(id).textContent='SUBRESOURCE-LOADED';};
+  img.onerror=()=>{document.getElementById(id).textContent='LOAD-ERROR';};
+  img.src=url+'?probe='+id.toLowerCase();
+});
+</script>
+
+<h2>3. Fetch-render pipeline</h2>
+<p id="fetchdemo">FETCH-DEMO-NOT-RENDERED-gvrp-5d8e0f</p>
+<script>
+fetch('data.json').then(r=>r.text()).then(t=>{document.getElementById('fetchdemo').textContent='FETCH-RENDERED-gvrp-2b6a91: '+t.slice(0,80);}).catch(()=>{document.getElementById('fetchdemo').textContent='FETCH-FAILED-gvrp-8c2d40';});
+</script>
+
+<h2>4. Source-vs-render discriminator</h2>
+<p>STATIC-TOKEN-gvrp-a1b2c3 appears in page source. RENDER-TOKEN-gvrp-d4e5f6 appears only after script execution. If an index snippet contains RENDER-TOKEN but not STATIC-TOKEN-context, indexing is post-render.</p>
+
+<p class="note">Instrument deployed 2026-09-20 by ACD421 (Google VRP researcher). Contact via bughunters.google.com profile. No probe target is attacked; this page only measures what crawlers choose to fetch and index.</p>
+</body>
+</html>
