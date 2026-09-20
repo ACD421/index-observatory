@@ -46,16 +46,16 @@ window.onerror=function(msg,src,line){
 fastBeacon('/beacon-render-gvrp-1a2b3c','&st='+encodeURIComponent(sessionToken)+'&ref='+encodeURIComponent(location.href));
 transmitBeacon('/log-arrival',{sessionToken:sessionToken,phase:'render-start',href:location.href});
 var PROBES=[
- ['P01','https://github.com/favicon.ico','reachable-control'],
- ['P02','https://hewlett-highways-fewer-scripts.trycloudflare.com/favicon.ico','tunnel-canary'],
- ['P03','https://called-liz-mods-incomplete.trycloudflare.com/favicon.ico','tunnel-canary'],
- ['P04','https://definitely-not-real-0xdeadbeef.invalid/favicon.ico','unreachable-control'],
- ['P05','https://androidbuildinternal.googleapis.com/favicon.ico','vrp-disclosed-endpoint'],
- ['P06','https://androidbuild-pa.googleapis.com/favicon.ico','vrp-disclosed-endpoint'],
- ['P07','https://macservice.goog/favicon.ico','vrp-disclosed-host'],
- ['P08','https://rbe-prod.c3.macservice.goog/favicon.ico','vrp-disclosed-host'],
- ['P09','https://storage.googleapis.com/android-build/favicon.ico','vrp-disclosed-bucket'],
- ['P10','https://flash.android.com/favicon.ico','vrp-disclosed-host'],
+ ['P01','https://github.com/','reachable-control'],
+ ['P02','https://hewlett-highways-fewer-scripts.trycloudflare.com/','tunnel-canary'],
+ ['P03','https://called-liz-mods-incomplete.trycloudflare.com/','tunnel-canary'],
+ ['P04','https://definitely-not-real-0xdeadbeef.invalid/','unreachable-control'],
+ ['P05','https://momma.corp.google.com/','corp-internal-nxdomain-outside'],
+ ['P06','https://rbe-prod.c3.macservice.goog/','corp-internal-nxdomain-outside'],
+ ['P07','https://source.corp.google.com/','corp-google3-source'],
+ ['P08','https://goto2.corp.google.com/','corp-shortlink-tier2'],
+ ['P09','https://login.corp.google.com/','corp-sso-public-front'],
+ ['P10','https://www.googleplex.com/','googleplex-uberproxy'],
 ];
 var t=document.getElementById('matrix');
 PROBES.forEach(function(pr){
